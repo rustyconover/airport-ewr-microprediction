@@ -1,17 +1,12 @@
 // What this code does is download the latest load information and publishes to microprediction.org
-import { MicroWriter, MicroWriterConfig, MicroReader } from "microprediction";
+import { MicroWriter, MicroWriterConfig } from "microprediction";
 import { stream_write_keys } from "./write-keys";
 const bent = require("bent");
 
 import * as _ from "lodash";
 const getJSON = bent("json");
 import { ScheduledHandler } from "aws-lambda";
-import S3 from "aws-sdk/clients/s3";
-
-type EmojiRecord = {
-  name: string;
-  score: number;
-};
+import moment from "moment-timezone";
 
 async function getParking(): Promise<
   Array<{
@@ -80,6 +75,12 @@ async function pushTSA() {
 }
 
 async function pushParking() {
+  // Only push new data to the parking stream every five minutes
+  // as it doesn't appear to change very fast.
+  if (moment().minute() % 5 !== 0) {
+    return;
+  }
+
   const parking = await getParking();
 
   const writes = [];

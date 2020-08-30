@@ -16,7 +16,8 @@
     "bent": "^7.3.10",
     "builtin-modules": "^3.1.0",
     "lodash": "^4.17.20",
-    "microprediction": "^1.0.3"
+    "microprediction": "^1.0.3",
+    "moment-timezone": "^0.5.31"
   },
   "devDependencies": {
     "mocha": "^8.0.1",
